@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from './db/prisma.service';
+import { PrismaService } from '@/db/prisma.service';
 import { ConfigModule } from '@nestjs/config';
-import { RedisModule } from './db/redis.module';
+import { RedisModule } from '@/db/redis.module';
 
 @Module({
   imports: [
