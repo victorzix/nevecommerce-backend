@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from '@/middlewares/exception.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,10 +12,10 @@ async function bootstrap() {
   app.enableCors();
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
-    .setTitle('Mip Manager')
-    .setDescription('A manager for teams')
+    .setTitle('Nevecommerce')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
