@@ -1,15 +1,25 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { AdminsRepository } from '@/admins/repositories/admins.repository';
-import { CreateAdminDTO } from '@/admins/dtos';
+import { Admin, CreateAdminDTO } from '@/admins/dtos';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class AdminsService {
-  constructor(private adminsRepository: AdminsRepository) {}
+  constructor(
+    private adminsRepository: AdminsRepository,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {}
 
   async register(dto: CreateAdminDTO) {
     const checkUser =
       (await this.adminsRepository.getByEmail(dto.email)) ||
-      (await this.adminsRepository.getByUserName(dto.username));
+      (await this.adminsRepository.getByUsername(dto.username));
 
     if (checkUser) {
       throw new BadRequestException('User already registered');
@@ -18,5 +28,48 @@ export class AdminsService {
     const admin = await this.adminsRepository.register(dto);
 
     return admin;
+  }
+
+  async getByEmail(email: string): Promise<Admin> {
+    const cachedUser: Admin = await this.cacheManager.get('authenticated_user');
+
+    if (cachedUser) {
+      return cachedUser;
+    }
+
+    const admin = await this.adminsRepository.getByEmail(email);
+
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    return admin;
+  }
+
+  async getByUsername(username: string): Promise<Admin> {
+    const cachedUser: Admin = await this.cacheManager.get('authenticated_user');
+
+    if (cachedUser) {
+      return cachedUser;
+    }
+
+    const admin = await this.adminsRepository.getByUsername(username);
+
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    return admin;
+  }
+
+  async delete(adminId: string): Promise<void> {
+    const admin = await this.adminsRepository.getById(adminId);
+
+    if (!admin) {
+      throw new InternalServerErrorException('Could not delete this account');
+    }
+
+    await this.adminsRepository.delete(adminId);
+    return;
   }
 }
