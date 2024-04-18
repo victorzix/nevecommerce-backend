@@ -35,7 +35,7 @@ export class AdminsRepository {
     return admin;
   }
 
-  async getByUserName(username: string): Promise<Admin> {
+  async getByUsername(username: string): Promise<Admin> {
     const admin = await this.prisma.admin.findUnique({
       where: { username },
     });

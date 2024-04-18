@@ -1,5 +1,13 @@
 import { AdminsService } from '@/admins/services/admins.service';
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateAdminDTO } from '@/admins/dtos';
 import { Response } from 'express';
@@ -17,5 +25,12 @@ export class AdminsController {
       data: admin,
       status: HttpStatus.CREATED,
     });
+  }
+
+  @Delete('adminId')
+  async deleteAdmin(@Param('adminId') adminId: string, @Res() res: Response) {
+    await this.adminsService.delete(adminId);
+
+    return res.status(HttpStatus.NO_CONTENT).json();
   }
 }
