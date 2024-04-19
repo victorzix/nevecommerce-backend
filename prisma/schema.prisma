@@ -15,7 +15,7 @@ datasource db {
 
 model Admin {
   id        String   @id @default(uuid())
-  username  String   @unique @default("admin") @db.VarChar(10)
+  name      String   @default("admin") @db.VarChar(10)
   password  String   @default("admin")
   email     String   @unique @default("admin@admin.com")
   createdAt DateTime @default(now())
