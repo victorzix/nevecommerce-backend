@@ -5,7 +5,7 @@ export class CreateAdminDTO {
   @ApiProperty()
   @IsString()
   @MaxLength(10)
-  username: string;
+  name: string;
 
   @ApiProperty()
   @IsString()

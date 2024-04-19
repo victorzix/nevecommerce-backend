@@ -35,13 +35,6 @@ export class AdminsRepository {
     return admin;
   }
 
-  async getByUsername(username: string): Promise<Admin> {
-    const admin = await this.prisma.admin.findUnique({
-      where: { username },
-    });
-    return admin;
-  }
-
   async delete(id: string): Promise<void> {
     await this.prisma.admin.delete({
       where: { id },

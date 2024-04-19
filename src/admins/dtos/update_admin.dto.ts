@@ -12,7 +12,7 @@ export class UpdateAdminDTO {
   @IsOptional()
   @IsString()
   @MaxLength(10)
-  username?: string;
+  name?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

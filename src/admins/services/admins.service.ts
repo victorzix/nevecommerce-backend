@@ -17,9 +17,7 @@ export class AdminsService {
   ) {}
 
   async register(dto: CreateAdminDTO) {
-    const checkUser =
-      (await this.adminsRepository.getByEmail(dto.email)) ||
-      (await this.adminsRepository.getByUsername(dto.username));
+    const checkUser = await this.adminsRepository.getByEmail(dto.email);
 
     if (checkUser) {
       throw new BadRequestException('User already registered');
@@ -38,22 +36,6 @@ export class AdminsService {
     }
 
     const admin = await this.adminsRepository.getByEmail(email);
-
-    if (!admin) {
-      throw new NotFoundException('Admin not found');
-    }
-
-    return admin;
-  }
-
-  async getByUsername(username: string): Promise<Admin> {
-    const cachedUser: Admin = await this.cacheManager.get('authenticated_user');
-
-    if (cachedUser) {
-      return cachedUser;
-    }
-
-    const admin = await this.adminsRepository.getByUsername(username);
 
     if (!admin) {
       throw new NotFoundException('Admin not found');
