@@ -8,6 +8,7 @@ import {
 import { AdminsRepository } from '@/admins/repositories/admins.repository';
 import { Admin, CreateAdminDTO } from '@/admins/dtos';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { PasswordUtils } from '@/shared/auth/utils/password.utils';
 
 @Injectable()
 export class AdminsService {
@@ -23,7 +24,12 @@ export class AdminsService {
       throw new BadRequestException('User already registered');
     }
 
-    const admin = await this.adminsRepository.register(dto);
+    const hashedPass = await PasswordUtils.hashPassword(dto.password);
+
+    const admin = await this.adminsRepository.register({
+      ...dto,
+      password: hashedPass,
+    });
 
     return admin;
   }
