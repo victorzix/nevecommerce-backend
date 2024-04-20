@@ -26,11 +26,4 @@ export class AdminsController {
       status: HttpStatus.CREATED,
     });
   }
-
-  @Delete('adminId')
-  async deleteAdmin(@Param('adminId') adminId: string, @Res() res: Response) {
-    await this.adminsService.delete(adminId);
-
-    return res.status(HttpStatus.NO_CONTENT).json();
-  }
 }
