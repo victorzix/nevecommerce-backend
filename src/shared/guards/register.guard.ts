@@ -11,9 +11,7 @@ export class RegisterGuard implements CanActivate {
     const token = this.checkToken(request);
 
     if (token) {
-      throw new BadRequestException(
-        'You cannot register if you are already logged in',
-      );
+      throw new BadRequestException('You are already logged in');
     }
     return true;
   }
