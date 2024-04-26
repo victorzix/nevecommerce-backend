@@ -1,13 +1,11 @@
-import { AdminsService } from '@/admins/services/admins.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginData } from '@/shared/auth/interfaces/login_data.dto';
 import { PasswordUtils } from '../utils/password.utils';
-import { Admin } from '@/admins/dtos';
 import { UserPayloadDTO } from '../dtos/user_payload.dto';
 import { UserPayloadBuilder } from '../builders/user_payload.builder';
 import { UsersService } from '@/shared/users/services/users.services';
-import { User } from '@/shared/users/dtos/user.dto';
+import { User } from '@/shared/users/dtos/';
 
 @Injectable()
 export class AuthService {
