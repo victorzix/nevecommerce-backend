@@ -34,6 +34,11 @@ export class AdminsService {
     return admin;
   }
 
+  async listAdmins() {
+    const admins = await this.adminsRepository.listAdmins();
+    return admins;
+  }
+
   async delete(adminId: string): Promise<void> {
     const admin = await this.adminsRepository.getById(adminId);
 

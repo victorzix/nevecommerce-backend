@@ -20,6 +20,11 @@ export class AdminsRepository {
     return admin;
   }
 
+  async listAdmins() {
+    const admins = await this.prisma.admin.findMany();
+    return admins;
+  }
+
   async delete(id: string): Promise<void> {
     await this.prisma.admin.delete({
       where: { id },
