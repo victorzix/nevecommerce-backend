@@ -1,5 +1,5 @@
 import { UserPayloadDTO } from '../dtos/user_payload.dto';
-import { User } from '@/shared/users/dtos/user.dto';
+import { User } from '@/shared/users/dtos/';
 
 export class UserPayloadBuilder {
   static createAdminPayload(user: User): UserPayloadDTO {

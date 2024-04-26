@@ -1,4 +1,4 @@
-import { AdminsService } from '@/admins/services/admins.service';
+import { UsersService } from '@/shared/users/services/users.services';
 import { AuthService } from '@/shared/auth/services/auth.services';
 import {
   Body,
@@ -17,10 +17,7 @@ import { RegisterGuard } from '@/shared/guards/register.guard';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private adminsService: AdminsService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @UseGuards(RegisterGuard)
   @Post('login')
