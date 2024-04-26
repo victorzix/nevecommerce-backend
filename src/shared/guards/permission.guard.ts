@@ -1,5 +1,5 @@
-import { Admin } from '@/admins/dtos';
-import { AdminsService } from '@/admins/services/admins.service';
+import { UsersService } from '@/shared/users/services/users.services';
+import { User } from '@/shared/users/dtos/';
 import {
   CanActivate,
   ExecutionContext,
@@ -9,14 +9,14 @@ import {
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  constructor(private readonly adminsService: AdminsService) {}
+  constructor(private readonly userService: UsersService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const userId: string = request.user.id;
 
-    const user = await this.adminsService.getById(userId);
+    const user = await this.userService.getById(userId);
 
-    if (!user || !(user instanceof Admin)) {
+    if (!user || !(user instanceof User)) {
       throw new UnauthorizedException('You do not have permission');
     }
 
