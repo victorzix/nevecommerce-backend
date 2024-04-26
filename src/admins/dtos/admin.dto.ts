@@ -1,12 +1,5 @@
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
-import {
-  IsDate,
-  IsEmail,
-  IsString,
-  IsUUID,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsDate, IsString, IsUUID, MaxLength } from 'class-validator';
 
 export class Admin {
   @ApiResponseProperty()
@@ -16,16 +9,7 @@ export class Admin {
   @ApiProperty()
   @IsString()
   @MaxLength(10)
-  name: string;
-
-  @ApiProperty()
-  @IsString()
-  @MinLength(4)
-  password: string;
-
-  @ApiProperty()
-  @IsEmail()
-  email: string;
+  userId: string;
 
   @ApiResponseProperty()
   @IsDate()

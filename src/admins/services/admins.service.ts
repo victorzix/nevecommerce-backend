@@ -1,40 +1,25 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { AdminsRepository } from '@/admins/repositories/admins.repository';
-import { Admin, CreateAdminDTO } from '@/admins/dtos';
-import { PasswordUtils } from '@/shared/auth/utils/password.utils';
+import { UsersService } from '@/shared/users/services/users.services';
+import { CreateAdminRequestDTO } from '../dtos/create_admin_request.dto';
 
 @Injectable()
 export class AdminsService {
-  constructor(private adminsRepository: AdminsRepository) {}
+  constructor(
+    private adminsRepository: AdminsRepository,
+    private usersService: UsersService,
+  ) {}
 
-  async register(dto: CreateAdminDTO) {
-    const checkUser = await this.adminsRepository.getByEmail(dto.email);
-
-    if (checkUser) {
-      throw new BadRequestException('User already registered');
-    }
-
-    const hashedPass = await PasswordUtils.hashPassword(dto.password);
+  async create(dto: CreateAdminRequestDTO) {
+    const user = await this.usersService.register({ ...dto });
 
     const admin = await this.adminsRepository.register({
-      ...dto,
-      password: hashedPass,
+      userId: user.id,
     });
-
-    return admin;
-  }
-
-  async getByEmail(email: string): Promise<Admin> {
-    const admin = await this.adminsRepository.getByEmail(email);
-
-    if (!admin) {
-      throw new NotFoundException('Admin not found');
-    }
 
     return admin;
   }
