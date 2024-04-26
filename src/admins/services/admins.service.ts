@@ -1,6 +1,6 @@
 import {
+  BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { AdminsRepository } from '@/admins/repositories/admins.repository';
@@ -39,14 +39,15 @@ export class AdminsService {
     return admins;
   }
 
-  async delete(adminId: string): Promise<void> {
-    const admin = await this.adminsRepository.getById(adminId);
+  async delete(userId: string): Promise<void> {
+    const admin = await this.adminsRepository.getByUserId(userId);
 
     if (!admin) {
-      throw new InternalServerErrorException('Could not delete this account');
+      throw new BadRequestException('Could not delete this account');
     }
 
-    await this.adminsRepository.delete(adminId);
+    await this.adminsRepository.delete(admin.id);
+
     return;
   }
 }

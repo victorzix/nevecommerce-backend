@@ -20,6 +20,13 @@ export class AdminsRepository {
     return admin;
   }
 
+  async getByUserId(userId: string): Promise<Admin> {
+    const admin = await this.prisma.admin.findFirst({
+      where: { userId: userId },
+    });
+    return admin;
+  }
+
   async listAdmins() {
     const admins = await this.prisma.admin.findMany();
     return admins;
