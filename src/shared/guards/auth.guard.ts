@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { AdminsRepository } from '@/admins/repositories/admins.repository';
 import { AuthenticatedUserDataBuilder } from '../auth/builders/authenticated_user_data.builder';
+import { UsersRepository } from '@/shared/users/repositories/users.repository';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private adminsRepository: AdminsRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
       });
 
-      const user = await this.adminsRepository.getById(payload.id);
+      const user = await this.usersRepository.getById(payload.id);
 
       if (!user) {
         throw new UnauthorizedException("Access don't authorized");

@@ -6,16 +6,18 @@ import { PasswordUtils } from '../utils/password.utils';
 import { Admin } from '@/admins/dtos';
 import { UserPayloadDTO } from '../dtos/user_payload.dto';
 import { UserPayloadBuilder } from '../builders/user_payload.builder';
+import { UsersService } from '@/shared/users/services/users.services';
+import { User } from '@/shared/users/dtos/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly adminsService: AdminsService,
+    private readonly usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
   async login({ email, password }: LoginData) {
-    const user: Admin = await this.adminsService.getByEmail(email);
+    const user: User = await this.usersService.getByEmail(email);
 
     if (!user) {
       throw new BadRequestException('Invalid credentials');
