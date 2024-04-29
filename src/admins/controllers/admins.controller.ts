@@ -5,6 +5,8 @@ import {
   Delete,
   Get,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -14,6 +16,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { CreateAdminRequestDTO } from '../dtos/create_admin_request.dto';
 import { AuthGuard } from '@/shared/guards/auth.guard';
+import { UpdateUserDTO } from '@/shared/users/dtos';
 
 @ApiTags('Admins')
 @UseGuards(AuthGuard)
@@ -37,6 +40,20 @@ export class AdminsController {
 
     return res.status(HttpStatus.OK).json({
       data: admins,
+      status: HttpStatus.OK,
+    });
+  }
+
+  @Patch(':userId')
+  async updateAdmin(
+    @Param('userId') userId: string,
+    @Res() res: Response,
+    @Body() data: UpdateUserDTO,
+  ) {
+    const admin = await this.adminsService.updateAdmin(userId, data);
+
+    return res.status(HttpStatus.OK).json({
+      data: admin,
       status: HttpStatus.OK,
     });
   }
