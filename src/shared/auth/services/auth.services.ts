@@ -30,7 +30,7 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const payload: UserPayloadDTO = UserPayloadBuilder.createAdminPayload(user);
+    const payload: UserPayloadDTO = UserPayloadBuilder.createUserPayload(user);
 
     const token = this.jwtService.sign(payload);
 

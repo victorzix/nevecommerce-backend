@@ -1,11 +1,11 @@
 import { UsersService } from '@/shared/users/services/users.services';
-import { User } from '@/shared/users/dtos/';
 import {
   CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Admin } from '@/admins/dtos';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -16,7 +16,7 @@ export class PermissionGuard implements CanActivate {
 
     const user = await this.userService.getById(userId);
 
-    if (!user || !(user instanceof User)) {
+    if (!user || !(user instanceof Admin)) {
       throw new UnauthorizedException('You do not have permission');
     }
 
