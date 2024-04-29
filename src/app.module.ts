@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from '@/config/db/redis.module';
 import { AuthModule } from '@/shared/auth/auth.module';
 import { UsersModule } from '@/shared/users/users.module';
+import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from '@/shared/users/users.module';
     AdminsModule,
     AuthModule,
     UsersModule,
+    ClientsModule,
   ],
   controllers: [],
   providers: [PrismaService],
