@@ -50,7 +50,7 @@ export class AdminsService {
     const updatedAdmin = await this.usersService.updateUser(userId, dto);
 
     if (!updatedAdmin) {
-      throw new BadRequestException('Could not update this admin');
+      throw new BadRequestException('Could not update this user');
     }
 
     return updatedAdmin;

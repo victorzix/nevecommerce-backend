@@ -1,4 +1,3 @@
-import { AdminsService } from '@/admins/services/admins.service';
 import {
   Body,
   Controller,
@@ -13,59 +12,61 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ClientsService } from '@/clients/services/clients.service';
+import { CreateClientRequestDTO } from '../dtos';
 import { Request, Response } from 'express';
-import { CreateAdminRequestDTO } from '../dtos/create_admin_request.dto';
-import { AuthGuard } from '@/shared/guards/auth.guard';
 import { UpdateUserDTO } from '@/shared/users/dtos';
+import { AuthGuard } from '@/shared/guards/auth.guard';
 import { PermissionGuard } from '@/shared/guards/permission.guard';
+import { RegisterGuard } from '@/shared/guards/register.guard';
 
-@ApiTags('Admins')
-@UseGuards(AuthGuard)
-@Controller('admin')
-export class AdminsController {
-  constructor(private adminsService: AdminsService) {}
+@ApiTags('Clients')
+@Controller('client')
+export class ClientsController {
+  constructor(private clientsService: ClientsService) {}
 
-  @UseGuards(PermissionGuard)
+  @UseGuards(RegisterGuard)
   @Post()
-  async create(@Body() dto: CreateAdminRequestDTO, @Res() res: Response) {
-    const admin = await this.adminsService.create(dto);
+  async create(@Body() dto: CreateClientRequestDTO, @Res() res: Response) {
+    const client = await this.clientsService.create(dto);
 
     return res.status(HttpStatus.CREATED).json({
-      data: admin,
+      data: client,
       status: HttpStatus.CREATED,
     });
   }
 
+  @UseGuards(AuthGuard)
   @UseGuards(PermissionGuard)
   @Get('list')
-  async listAdmins(@Res() res: Response) {
-    const admins = await this.adminsService.listAdmins();
+  async listClients(@Res() res: Response) {
+    const clients = await this.clientsService.listClients();
 
     return res.status(HttpStatus.OK).json({
-      data: admins,
+      data: clients,
       status: HttpStatus.OK,
     });
   }
 
-  @UseGuards(PermissionGuard)
+  @UseGuards(AuthGuard)
   @Patch(':userId')
   async updateAdmin(
     @Param('userId') userId: string,
     @Res() res: Response,
     @Body() data: UpdateUserDTO,
   ) {
-    const admin = await this.adminsService.updateAdmin(userId, data);
+    const client = await this.clientsService.updateClient(userId, data);
 
     return res.status(HttpStatus.OK).json({
-      data: admin,
+      data: client,
       status: HttpStatus.OK,
     });
   }
 
-  @UseGuards(PermissionGuard)
+  @UseGuards(AuthGuard)
   @Delete()
   async deleteAdmin(@Req() req: Request, @Res() res: Response) {
-    await this.adminsService.delete(req.user.id);
+    await this.clientsService.delete(req.user.id);
 
     return res.clearCookie('access_token').status(HttpStatus.NO_CONTENT).json();
   }
